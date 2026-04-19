@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RAK SIKU 3D - 角鋼貨架</title>
+  <title>RAK SIKU 3D - Rak Besi Siku</title>
   <style>
     * {
       margin: 0;
@@ -164,30 +164,30 @@
 <div class="container">
   <div class="left-panel">
     <h1>📐 RAK SIKU 3D</h1>
-    <p class="subtitle">角鋼貨架計算 + 3D 預覽 | 滑鼠拖拽旋轉</p>
+    <p class="subtitle">Kalkulator Rak Besi Siku + Pratinjau 3D | Seret mouse untuk rotasi</p>
 
     <div class="form-group">
-  <label>高度 (cm)</label>
+  <label>Tinggi (cm)</label>
   <input type="number" id="height" value="150" min="50" step="5">
 </div>
 
 <div class="form-group">
-  <label>長度 (cm)</label>
+  <label>Panjang (cm)</label>
   <input type="number" id="width" value="150" min="30" step="5">
 </div>
 
 <div class="form-group">
-  <label>寬度 (cm)</label>
+  <label>Lebar (cm)</label>
   <input type="number" id="depth" value="40" min="20" step="5">
 </div>
 
 <div class="form-group">
-  <label>層板數量</label>
+  <label>Jumlah Rak</label>
   <input type="number" id="levels" value="5" min="2" max="10">
 </div>
 
     <div class="form-group">
-  <label>價格模式</label>
+  <label>Mode Harga</label>
   <select id="price-mode" style="
     width:100%;
     padding:10px 12px;
@@ -197,30 +197,30 @@
     background:#fff;
   ">
     
-<option value="97000">幫忙切（Rp 97.000 / 根）</option>
-<option value="107000" selected>幫忙切＋安裝（Rp 107.000 / 根）</option>
+<option value="97000">Potong saja (Rp 97.000 / batang)</option>
+<option value="107000" selected>Potong + Pasang (Rp 107.000 / batang)</option>
   </select>
 </div>
 
-    <button id="calculate-btn">更新模型</button>
-    <p class="hint">🖱️ 滑鼠拖拽旋轉視角 | 滾輪縮放</p>
+    <button id="calculate-btn">Perbarui Model</button>
+    <p class="hint">🖱️ Seret mouse untuk rotasi kamera | Gulung zoom</p>
 
     <div class="result-box">
-      <h2>材料清單</h2>
-      <div class="result-item"><span>立柱 (4支)</span><strong id="result-tiangs">200 cm</strong></div>
-      <div class="result-item"><span>長橫桿</span><strong id="result-long">8 pcs</strong></div>
-      <div class="result-item"><span>短橫桿</span><strong id="result-short">8 pcs</strong></div>
-      <div class="result-item"><span>層板</span><strong id="result-board">4 pcs</strong></div>
-      <div class="result-item"><span>螺絲+螺母</span><strong id="result-bolt">40 pcs</strong></div>
-<div class="result-item"><span>3米角鋼總數</span><strong id="result-total-bar">0 根</strong></div>
-<div class="result-item"><span>角鋼價格</span><strong id="result-bar-price">Rp 0</strong></div>
-<div class="result-item"><span>螺絲價格</span><strong id="result-screw-price">Rp 0</strong></div>
-<div class="result-item"><span>層板價格</span><strong id="result-board-price">Rp 0</strong></div>
-<div class="result-item"><span>三角鋼價格</span><strong id="result-triangle-price">Rp 32.000</strong></div>
-<div class="result-item"><span>整組價格</span><strong id="result-total-price">Rp 0</strong></div>
+      <h2>Daftar Material</h2>
+      <div class="result-item"><span>Tiang (4 pcs)</span><strong id="result-tiangs">200 cm</strong></div>
+      <div class="result-item"><span>Batang Panjang</span><strong id="result-long">8 pcs</strong></div>
+      <div class="result-item"><span>Batang Pendek</span><strong id="result-short">8 pcs</strong></div>
+      <div class="result-item"><span>Papan Rak</span><strong id="result-board">4 pcs</strong></div>
+      <div class="result-item"><span>Baut + Mur</span><strong id="result-bolt">40 pcs</strong></div>
+<div class="result-item"><span>Total Besi Siku 3m</span><strong id="result-total-bar">0 batang</strong></div>
+<div class="result-item"><span>Harga Besi Siku</span><strong id="result-bar-price">Rp 0</strong></div>
+<div class="result-item"><span>Harga Baut</span><strong id="result-screw-price">Rp 0</strong></div>
+<div class="result-item"><span>Harga Papan Rak</span><strong id="result-board-price">Rp 0</strong></div>
+<div class="result-item"><span>Harga Braket Segitiga</span><strong id="result-triangle-price">Rp 32.000</strong></div>
+<div class="result-item"><span>Harga Total Rak</span><strong id="result-total-price">Rp 0</strong></div>
 
 <div style="margin-top:20px;">
-  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">切料表</h3>
+  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">Tabel Pemotongan</h3>
   <div id="cutting-list" style="
     background:#fff;
     border:1px solid #e2e8f0;
@@ -234,7 +234,7 @@
 </div>
 
 <div style="margin-top:20px;">
-  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">層板切割圖</h3>
+  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">Diagram Potong Papan</h3>
   <div id="board-layout" style="
     background:#fff;
     border:1px solid #e2e8f0;
@@ -252,40 +252,40 @@
   </div>
 </div>
 
-<!-- 使用傳統 script 方式載入 Three.js，更穩定 -->
+<!-- Memuat Three.js dengan cara tradisional -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <script>
-  // 等待 DOM 加載完成
+  // Menunggu DOM selesai dimuat
   (function() {
-    // 初始化變量
+    // Inisialisasi variabel
     let scene, camera, renderer, controls, rackGroup;
     let container = document.getElementById('three-container');
     
-    // 檢查 Three.js 是否加載
+    // Cek apakah Three.js sudah dimuat
     if (typeof THREE === 'undefined') {
-      console.error('Three.js 未加載');
+      console.error('Three.js tidak dimuat');
       return;
     }
     
-    // 初始化場景
+    // Inisialisasi scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf1f5f9);
     scene.fog = new THREE.FogExp2(0xf1f5f9, 0.0005);
     
-    // 相機
+    // Kamera
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.set(180, 150, 200);
     camera.lookAt(0, 80, 0);
     
-    // 渲染器
+    // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
     
-    // 控制器
+    // Kontrol
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
@@ -293,7 +293,7 @@
     controls.enableZoom = true;
     controls.target.set(0, 80, 0);
     
-    // 燈光
+    // Pencahayaan
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
     
@@ -310,17 +310,17 @@
     fillLight.position.set(80, 60, 120);
     scene.add(fillLight);
     
-    // 灰色磁磚地板
+    // Lantai abu-abu bertekstur
 const floorCanvas = document.createElement('canvas');
 floorCanvas.width = 512;
 floorCanvas.height = 512;
 
 const ctx = floorCanvas.getContext('2d');
 
-// 底色
+// Warna dasar
 ctx.fillStyle = '#8f8f8f';
 ctx.fillRect(0, 0, 512, 512);
-// 做出大理石灰色紋路
+// Membuat tekstur marmer abu-abu
 for (let i = 0; i < 1200; i++) {
   const x = Math.random() * 512;
   const y = Math.random() * 512;
@@ -342,7 +342,7 @@ for (let i = 0; i < 1200; i++) {
   ctx.stroke();
 }
 
-// 磁磚縫
+// Garis nat ubin
 ctx.strokeStyle = '#6f6f6f';
 ctx.lineWidth = 2;
 
@@ -376,16 +376,16 @@ floor.position.y = -4;
 floor.receiveShadow = true;
 scene.add(floor);
     
-    // 材質
+    // Material
     const metalMat = new THREE.MeshStandardMaterial({ color: 0x5c6b7e, metalness: 0.7, roughness: 0.3 });
     const darkMetalMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, metalness: 0.65, roughness: 0.35 });
     const woodMat = new THREE.MeshStandardMaterial({ color: 0xb87c4f, roughness: 0.7 });
     
-    // 建立貨架模型
+    // Membangun model rak
     function buildRack(width, depth, height, levels) {
       const group = new THREE.Group();
       
-      // 四根立柱
+      // Empat tiang
       const poleGeo = new THREE.BoxGeometry(4.5, height, 4.5);
       const positions = [
         [-width/2, height/2, -depth/2],
@@ -400,7 +400,7 @@ scene.add(floor);
         group.add(pole);
       });
       
-      // 計算每層高度
+      // Menghitung tinggi setiap rak
       const startY = 6;
       const endY = height - 6;
       let levelY = [];
@@ -430,7 +430,7 @@ if (width >= 200 && width <= 300) {
 }levelY.forEach((y, index) => {
 
 
-  // 層板
+  // Papan rak
   const board = new THREE.Mesh(
     new THREE.BoxGeometry(width - 2, 2, depth - 2),
     woodMat
@@ -440,7 +440,7 @@ if (width >= 200 && width <= 300) {
   board.receiveShadow = true;
   group.add(board);
 
-  // 前後長橫桿（移到層板下方）
+  // Batang panjang depan & belakang (diletakkan di bawah papan)
   const longBar = new THREE.BoxGeometry(width, 3, 3);
 
   const front = new THREE.Mesh(longBar, darkMetalMat);
@@ -455,7 +455,7 @@ if (width >= 200 && width <= 300) {
 
   longCount += 2;
 
-  // 左右短橫桿（移到層板下方）
+  // Batang pendek kiri & kanan
   const shortBar = new THREE.BoxGeometry(3, 3, depth);
 
   const left = new THREE.Mesh(shortBar, darkMetalMat);
@@ -470,7 +470,7 @@ if (width >= 200 && width <= 300) {
 
   shortCount += 2;
 
-  // 150cm 時，中間加 1 根，放在層板下方
+  // Jika lebar >120 & <=150: tambah 1 batang tengah
   if (width > 120 && width <= 150) {
     const middle = new THREE.Mesh(shortBar, darkMetalMat);
     middle.position.set(0, y - 3, 0);
@@ -480,7 +480,7 @@ if (width >= 200 && width <= 300) {
     shortCount += 1;
   }
 
-  // 200cm 時，中間加 2 根，放在層板下方
+  // Jika lebar >150 & <200: tambah 2 batang tengah
   if (width > 150 && width < 200) {
   const middle1 = new THREE.Mesh(shortBar, darkMetalMat);
   middle1.position.set(-width / 4, y - 3, 0);
@@ -508,7 +508,7 @@ if (width >= 200 && width <= 300) {
   shortCount += 3;
 }
 
-// 顯示每層之間的高度
+// Menampilkan jarak antar rak
 if (index > 0) {
   const gap = Math.round(levelY[index] - levelY[index - 1]);
 
@@ -542,7 +542,7 @@ if (index > 0) {
 
   labelSprite.scale.set(30, 7.5, 1);
 
-  // 放在左前立柱旁
+  // Ditempatkan di samping tiang kiri depan
   labelSprite.position.set(
     -width / 2 - 18,
     (levelY[index] + levelY[index - 1]) / 2,
@@ -551,17 +551,17 @@ if (index > 0) {
 
   group.add(labelSprite);
 }});
-// 螺絲數量
+// Jumlah baut
 let bolts = 0;
 
-// 中間多出的短橫桿
+// Batang tengah tambahan
 const extraMiddleBars = shortPerLevel - 2;
 
-// 每層因中間支架增加的螺絲
+// Baut tambahan per tingkat karena batang tengah
 const extraBoltPerLevel = extraMiddleBars * 2;
 
-// 前兩層：28 顆
-// 第三層以上：12 顆
+// Dua tingkat pertama: 28 baut
+// Tingkat ketiga dst: 12 baut
 if (levels <= 2) {
   bolts = levels * (28 + extraBoltPerLevel);
 } else {
@@ -571,7 +571,7 @@ if (levels <= 2) {
 }   
 
 
-      // 更新左側數據
+      // Update data di panel kiri
       const poleBarNeed = Math.ceil(4 / Math.floor(300 / height));
 const longBarNeed = Math.ceil(longCount / Math.floor(300 / width));
 const shortBarNeed = Math.ceil(shortCount / Math.floor(300 / depth));
@@ -579,13 +579,13 @@ const shortBarNeed = Math.ceil(shortCount / Math.floor(300 / depth));
 const total3mBars = poleBarNeed + longBarNeed + shortBarNeed;
 
 document.getElementById('result-tiangs').innerHTML =
-  `4 支 (${height} cm) / ${poleBarNeed} 根 3米角鋼`;
+  `4 pcs (${height} cm) / ${poleBarNeed} batang besi 3m`;
 
 document.getElementById('result-long').innerHTML =
-  `${longCount} 支 (${width} cm) / ${longBarNeed} 根 3米角鋼`;
+  `${longCount} pcs (${width} cm) / ${longBarNeed} batang besi 3m`;
 
 document.getElementById('result-short').innerHTML =
-  `${shortCount} 支 (${depth} cm) / ${shortBarNeed} 根 3米角鋼`;
+  `${shortCount} pcs (${depth} cm) / ${shortBarNeed} batang besi 3m`;
 
 const boardCols = Math.max(1, Math.floor(240 / width));
 const boardRows = Math.max(1, Math.floor(120 / depth));
@@ -598,17 +598,17 @@ const displayBoardSheet =
 const triangleBrackets = levels >= 2 ? 16 : 0;
 
 document.getElementById('result-board').innerHTML =
-  `${levels} 片 / ${displayBoardSheet} 張 120×240板材`;
+  `${levels} lembar / ${displayBoardSheet} lembar papan 120×240cm`;
 
 document.getElementById('result-bolt').innerHTML =
-  `${bolts} 組`;
+  `${bolts} set`;
 
 if (!document.getElementById('result-triangle')) {
   const triangleRow = document.createElement('div');
   triangleRow.className = 'result-item';
   triangleRow.innerHTML = `
-    <span>三角鋼</span>
-    <strong id="result-triangle">${triangleBrackets} 片</strong>
+    <span>Braket Segitiga</span>
+    <strong id="result-triangle">${triangleBrackets} pcs</strong>
   `;
 
   document
@@ -617,25 +617,25 @@ if (!document.getElementById('result-triangle')) {
     .insertAdjacentElement('afterend', triangleRow);
 } else {
   document.getElementById('result-triangle').innerHTML =
-    `${triangleBrackets} 片`;
+    `${triangleBrackets} pcs`;
 }
 document.getElementById('result-total-bar').innerHTML =
-  `${total3mBars} 根`;
+  `${total3mBars} batang`;
 
  const pricePerBar = parseInt(document.getElementById('price-mode').value);
 
-// 角鋼價格
+// Harga besi siku
 const barPrice = total3mBars * pricePerBar;
 
-// 螺絲價格
+// Harga baut
 let screwPrice = 0;
 
-// 幫忙切＋安裝：全部螺絲都算
+// Potong + Pasang: semua baut dihitung
 if (pricePerBar === 107000) {
   screwPrice = bolts * 1000;
 }
 
-// 幫忙切：10支以上角鋼送50組螺絲，超過50組才開始算
+// Potong saja: gratis 50 baut jika ≥10 batang, gratis 100 jika ≥20 batang
 if (pricePerBar === 97000) {
   let freeBolts = 0;
 
@@ -648,30 +648,30 @@ if (pricePerBar === 97000) {
   const chargeBolt = Math.max(0, bolts - freeBolts);
   screwPrice = chargeBolt * 1000;
 }
-// 板材價格
-// 不足半張算半張，超過半張算下一個 0.5
+// Harga papan
+// Kurang dari setengah dihitung setengah, lebih dari setengah dibulatkan ke 0.5 berikutnya
 const boardSheetCount = Math.ceil(boardNeed * 2) / 2;
 
 const boardPrice = boardSheetCount * 155000;
 
-// 三角鋼價格
+// Harga braket segitiga
 let trianglePrice = 32000;
 
-// 幫忙切，而且3米角鋼達10支以上，送16片三角鋼
+// Mode potong saja dan total besi 3m ≥10, gratis 16 braket
 if (pricePerBar === 97000 && total3mBars >= 10) {
   trianglePrice = 0;
 }
 
-// 總價
+// Total harga
 const totalPrice = barPrice + screwPrice + boardPrice + trianglePrice;
 
-// 顯示
+// Tampilkan
 document.getElementById('result-bar-price').innerHTML =
   `Rp ${barPrice.toLocaleString('id-ID')}`;
 
 if (pricePerBar === 107000) {
   document.getElementById('result-screw-price').innerHTML =
-    `${bolts} 組 = Rp ${screwPrice.toLocaleString('id-ID')}`;
+    `${bolts} set = Rp ${screwPrice.toLocaleString('id-ID')}`;
 } else if (pricePerBar === 97000) {
   let freeBolts = 0;
 
@@ -685,16 +685,16 @@ if (pricePerBar === 107000) {
 
   document.getElementById('result-screw-price').innerHTML =
     freeBolts > 0
-      ? `${chargeBolt} 組（送${freeBolts}組） = Rp ${screwPrice.toLocaleString('id-ID')}`
-      : `${bolts} 組 = Rp ${screwPrice.toLocaleString('id-ID')}`;
+      ? `${chargeBolt} set (gratis ${freeBolts} set) = Rp ${screwPrice.toLocaleString('id-ID')}`
+      : `${bolts} set = Rp ${screwPrice.toLocaleString('id-ID')}`;
 } else {
-  document.getElementById('result-screw-price').innerHTML = `免費`;
+  document.getElementById('result-screw-price').innerHTML = `Gratis`;
 }document.getElementById('result-board-price').innerHTML =
-  `${boardSheetCount} 張 = Rp ${boardPrice.toLocaleString('id-ID')}`;
+  `${boardSheetCount} lembar = Rp ${boardPrice.toLocaleString('id-ID')}`;
 
 document.getElementById('result-triangle-price').innerHTML =
   trianglePrice === 0
-    ? `送16片`
+    ? `Gratis 16 pcs`
     : `Rp ${trianglePrice.toLocaleString('id-ID')}`;
 document.getElementById('result-total-price').innerHTML =
   `Rp ${totalPrice.toLocaleString('id-ID')}`;
@@ -717,10 +717,10 @@ function addCutting(size, count, label) {
     const used = use * size;
     const remain = 300 - used;
 
-    let text = `第${barIndex}根：${pieces.join(' + ')} → ${label}`;
+    let text = `Batang ke-${barIndex}: ${pieces.join(' + ')} → ${label}`;
 
     if (remain > 0) {
-      text += `，剩 ${remain}cm`;
+      text += `, sisa ${remain}cm`;
     }
 
     cuttingLines.push(text);
@@ -730,9 +730,9 @@ function addCutting(size, count, label) {
   }
 }
 
-addCutting(height, 4, '立柱');
-addCutting(width, longCount, '長橫桿');
-addCutting(depth, shortCount, '短橫桿');
+addCutting(height, 4, 'Tiang');
+addCutting(width, longCount, 'Batang Panjang');
+addCutting(depth, shortCount, 'Batang Pendek');
 
 document.getElementById('cutting-list').innerHTML =
   cuttingLines.join('<br>');
@@ -749,7 +749,7 @@ for (let s = 1; s <= sheetNeed; s++) {  boardHtml += `
         margin-bottom:8px;
         color:#334155;
       ">
-        第${s}張板材（120 × 240 cm）
+        Lembar ke-${s} (120 × 240 cm)
       </div>
 
       <div style="
@@ -813,7 +813,7 @@ const remainH = Math.max(0, 120 - boardRows * Math.min(depth, 120));
       writing-mode:vertical-rl;
       text-align:center;
     ">
-      剩 ${remainW} × 120
+      Sisa ${remainW} × 120
     </div>
   `;
 }
@@ -835,7 +835,7 @@ const remainH = Math.max(0, 120 - boardRows * Math.min(depth, 120));
       color:#92400e;
       text-align:center;
     ">
-      剩 ${boardCols * Math.min(width, 240)} × ${remainH}
+      Sisa ${boardCols * Math.min(width, 240)} × ${remainH}
     </div>
   `;
 }
@@ -848,7 +848,7 @@ boardHtml += `
 
 document.getElementById('board-layout').innerHTML = boardHtml;
 
-// ===== 總尺寸標示 =====
+// ===== Label dimensi total =====
 function createSizeLabel(text, x, y, z, sx = 40, sy = 8) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -884,9 +884,9 @@ function createSizeLabel(text, x, y, z, sx = 40, sy = 8) {
   group.add(sprite);
 }
 
-// 長度（前面）
+// Panjang (depan)
 createSizeLabel(
-  `長 ${width} cm`,
+  `Panjang ${width} cm`,
   0,
   8,
   depth / 2 + 20,
@@ -894,9 +894,9 @@ createSizeLabel(
   8
 );
 
-// 寬度 / 深度（左側）
+// Lebar (samping kiri)
 createSizeLabel(
-  `寬 ${depth} cm`,
+  `Lebar ${depth} cm`,
   -width / 2 - 20,
   8,
   0,
@@ -904,9 +904,9 @@ createSizeLabel(
   8
 );
 
-// 高度（右側中間）
+// Tinggi (kanan tengah)
 createSizeLabel(
-  `高 ${height} cm`,
+  `Tinggi ${height} cm`,
   width / 2 + 20,
   height / 2,
   depth / 2 + 10,
@@ -922,16 +922,16 @@ function updateRack() {
   const width = parseFloat(document.getElementById('width').value);
   const depth = parseFloat(document.getElementById('depth').value);
   const levels = parseInt(document.getElementById('levels').value);      
-      // 移除舊模型
+      // Hapus model lama
       if (rackGroup) {
         scene.remove(rackGroup);
       }
       
-      // 建立新模型
+      // Buat model baru
       rackGroup = buildRack(width, depth, height, levels);
       scene.add(rackGroup);
       
-      // 調整相機目標
+      // Sesuaikan target kamera
       controls.target.set(0, height / 2, 0);
 
 const maxSize = Math.max(width, depth, height);
@@ -946,7 +946,7 @@ camera.lookAt(0, height / 2, 0);
 controls.update();
     }
     
-    // 綁定事件
+    // Event binding
     document.getElementById('calculate-btn').addEventListener('click', updateRack);
 document.getElementById('height').addEventListener('input', updateRack);
 document.getElementById('width').addEventListener('input', updateRack);
@@ -954,15 +954,15 @@ document.getElementById('depth').addEventListener('input', updateRack);
 document.getElementById('levels').addEventListener('input', updateRack);
 document.getElementById('price-mode').addEventListener('change', updateRack);
     
-    // 動畫循環
+    // Animasi loop
     function animate() {
       requestAnimationFrame(animate);
-      controls.update(); // 更新控制
+      controls.update();
       renderer.render(scene, camera);
     }
     animate();
     
-    // 視窗大小調整
+    // Resize window
     window.addEventListener('resize', function() {
       const w = container.clientWidth;
       const h = container.clientHeight;
@@ -971,10 +971,10 @@ document.getElementById('price-mode').addEventListener('change', updateRack);
       renderer.setSize(w, h);
     });
     
-    // 初始加載模型
+    // Load model awal
     setTimeout(updateRack, 100);
     
-    console.log('3D 場景已啟動');
+    console.log('Scene 3D telah dimulai');
   })();
 </script>
 </body>
