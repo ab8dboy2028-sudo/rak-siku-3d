@@ -572,20 +572,7 @@ if (levels <= 2) {
 
 
       // Update data di panel kiri
-      const poleBarNeed = Math.ceil(4 / Math.floor(300 / height));
-const longBarNeed = Math.ceil(longCount / Math.floor(300 / width));
-const shortBarNeed = Math.ceil(shortCount / Math.floor(300 / depth));
-
-const total3mBars = poleBarNeed + longBarNeed + shortBarNeed;
-
-document.getElementById('result-tiangs').innerHTML =
-  `4 pcs (${height} cm) / ${poleBarNeed} batang besi 3m`;
-
-document.getElementById('result-long').innerHTML =
-  `${longCount} pcs (${width} cm) / ${longBarNeed} batang besi 3m`;
-
-document.getElementById('result-short').innerHTML =
-  `${shortCount} pcs (${depth} cm) / ${shortBarNeed} batang besi 3m`;
+      
 
 const boardCols = Math.max(1, Math.floor(240 / width));
 const boardRows = Math.max(1, Math.floor(120 / depth));
@@ -603,26 +590,123 @@ document.getElementById('result-board').innerHTML =
 document.getElementById('result-bolt').innerHTML =
   `${bolts} set`;
 
-if (!document.getElementById('result-triangle')) {
-  const triangleRow = document.createElement('div');
-  triangleRow.className = 'result-item';
-  triangleRow.innerHTML = `
-    <span>Braket Segitiga</span>
-    <strong id="result-triangle">${triangleBrackets} pcs</strong>
-  `;
 
-  document
-    .getElementById('result-bolt')
-    .parentElement
-    .insertAdjacentElement('afterend', triangleRow);
-} else {
-  document.getElementById('result-triangle').innerHTML =
-    `${triangleBrackets} pcs`;
+// Tampilkan
+
+
+let cuttingLines = [];
+let barIndex = 1;
+
+// 剩餘短料數量
+let remainShort = shortCount;
+
+// ===== Tiang =====
+for (let i = 0; i < 4; i++) {
+  let pieces = [height];
+  let remain = 300 - height;
+
+  // 盡量利用剩下的長度切短料
+  while (remainShort > 0 && remain >= depth) {
+    pieces.push(depth);
+    remain -= depth;
+    remainShort--;
+  }
+
+  let text = `Batang ke-${barIndex}: ${pieces.join(' + ')} → Tiang`;
+
+  if (remain > 0) {
+    text += `, sisa ${remain}cm`;
+  }
+
+  cuttingLines.push(text);
+  barIndex++;
 }
+
+// ===== Batang Panjang =====
+let remainLong = longCount;
+
+while (remainLong > 0) {
+  const perBar = Math.floor(300 / width);
+  const use = Math.min(remainLong, perBar);
+
+  let pieces = [];
+
+  for (let i = 0; i < use; i++) {
+    pieces.push(width);
+  }
+
+  let remain = 300 - (use * width);
+
+  // 如果還有空間，也拿來切短料
+  while (remainShort > 0 && remain >= depth) {
+    pieces.push(depth);
+    remain -= depth;
+    remainShort--;
+  }
+
+  let text = `Batang ke-${barIndex}: ${pieces.join(' + ')} → Batang Panjang`;
+
+  if (remain > 0) {
+    text += `, sisa ${remain}cm`;
+  }
+
+  cuttingLines.push(text);
+
+  remainLong -= use;
+  barIndex++;
+}
+
+// ===== 剩下沒切完的短料 =====
+while (remainShort > 0) {
+  const perBar = Math.floor(300 / depth);
+  const use = Math.min(remainShort, perBar);
+
+  let pieces = [];
+
+  for (let i = 0; i < use; i++) {
+    pieces.push(depth);
+  }
+
+  let remain = 300 - (use * depth);
+
+  let text = `Batang ke-${barIndex}: ${pieces.join(' + ')} → Batang Pendek`;
+
+  if (remain > 0) {
+    text += `, sisa ${remain}cm`;
+  }
+
+  cuttingLines.push(text);
+
+  remainShort -= use;
+  barIndex++;
+}
+document.getElementById('cutting-list').innerHTML =
+  cuttingLines.join('<br>');
+
+
+const total3mBars = cuttingLines.length;
+
+const poleBarNeed = 4;
+const longBarNeed = Math.ceil(longCount / Math.floor(300 / width));
+const shortBarNeed = Math.max(
+  0,
+  total3mBars - poleBarNeed - longBarNeed
+);
+
+document.getElementById('result-tiangs').innerHTML =
+  `4 pcs (${height} cm) / ${poleBarNeed} batang besi 3m`;
+
+document.getElementById('result-long').innerHTML =
+  `${longCount} pcs (${width} cm) / ${longBarNeed} batang besi 3m`;
+
+document.getElementById('result-short').innerHTML =
+  `${shortCount} pcs (${depth} cm) / ${shortBarNeed} batang besi 3m`;
+
+
 document.getElementById('result-total-bar').innerHTML =
   `${total3mBars} batang`;
 
- const pricePerBar = parseInt(document.getElementById('price-mode').value);
+  const pricePerBar = parseInt(document.getElementById('price-mode').value);
 
 // Harga besi siku
 const barPrice = total3mBars * pricePerBar;
@@ -648,16 +732,14 @@ if (pricePerBar === 97000) {
   const chargeBolt = Math.max(0, bolts - freeBolts);
   screwPrice = chargeBolt * 1000;
 }
-// Harga papan
-// Kurang dari setengah dihitung setengah, lebih dari setengah dibulatkan ke 0.5 berikutnya
-const boardSheetCount = Math.ceil(boardNeed * 2) / 2;
 
+// Harga papan
+const boardSheetCount = Math.ceil(boardNeed * 2) / 2;
 const boardPrice = boardSheetCount * 155000;
 
 // Harga braket segitiga
 let trianglePrice = 32000;
 
-// Mode potong saja dan total besi 3m ≥10, gratis 16 braket
 if (pricePerBar === 97000 && total3mBars >= 10) {
   trianglePrice = 0;
 }
@@ -665,8 +747,7 @@ if (pricePerBar === 97000 && total3mBars >= 10) {
 // Total harga
 const totalPrice = barPrice + screwPrice + boardPrice + trianglePrice;
 
-// Tampilkan
-document.getElementById('result-bar-price').innerHTML =
+ document.getElementById('result-bar-price').innerHTML =
   `Rp ${barPrice.toLocaleString('id-ID')}`;
 
 if (pricePerBar === 107000) {
@@ -689,53 +770,18 @@ if (pricePerBar === 107000) {
       : `${bolts} set = Rp ${screwPrice.toLocaleString('id-ID')}`;
 } else {
   document.getElementById('result-screw-price').innerHTML = `Gratis`;
-}document.getElementById('result-board-price').innerHTML =
+}
+
+document.getElementById('result-board-price').innerHTML =
   `${boardSheetCount} lembar = Rp ${boardPrice.toLocaleString('id-ID')}`;
 
 document.getElementById('result-triangle-price').innerHTML =
   trianglePrice === 0
     ? `Gratis 16 pcs`
     : `Rp ${trianglePrice.toLocaleString('id-ID')}`;
+
 document.getElementById('result-total-price').innerHTML =
   `Rp ${totalPrice.toLocaleString('id-ID')}`;
-
-
-let cuttingLines = [];
-let barIndex = 1;
-
-function addCutting(size, count, label) {
-  const perBar = Math.floor(300 / size);
-
-  while (count > 0) {
-    const use = Math.min(count, perBar);
-
-    let pieces = [];
-    for (let i = 0; i < use; i++) {
-      pieces.push(size);
-    }
-
-    const used = use * size;
-    const remain = 300 - used;
-
-    let text = `Batang ke-${barIndex}: ${pieces.join(' + ')} → ${label}`;
-
-    if (remain > 0) {
-      text += `, sisa ${remain}cm`;
-    }
-
-    cuttingLines.push(text);
-
-    count -= use;
-    barIndex++;
-  }
-}
-
-addCutting(height, 4, 'Tiang');
-addCutting(width, longCount, 'Batang Panjang');
-addCutting(depth, shortCount, 'Batang Pendek');
-
-document.getElementById('cutting-list').innerHTML =
-  cuttingLines.join('<br>');
 
 const sheetNeed = Math.ceil(levels / boardPerSheet);
 
@@ -849,8 +895,7 @@ boardHtml += `
 document.getElementById('board-layout').innerHTML = boardHtml;
 
 // ===== Label dimensi total =====
-function createSizeLabel(text, x, y, z, sx = 40, sy = 8) {
-  const canvas = document.createElement('canvas');
+function createSizeLabel(group, text, x, y, z, sx = 40, sy = 8) {  const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 96;
 
@@ -886,6 +931,7 @@ function createSizeLabel(text, x, y, z, sx = 40, sy = 8) {
 
 // Panjang (depan)
 createSizeLabel(
+  group,
   `Panjang ${width} cm`,
   0,
   8,
@@ -896,6 +942,7 @@ createSizeLabel(
 
 // Lebar (samping kiri)
 createSizeLabel(
+  group,
   `Lebar ${depth} cm`,
   -width / 2 - 20,
   8,
@@ -906,6 +953,7 @@ createSizeLabel(
 
 // Tinggi (kanan tengah)
 createSizeLabel(
+  group,
   `Tinggi ${height} cm`,
   width / 2 + 20,
   height / 2,
