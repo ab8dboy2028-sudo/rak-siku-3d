@@ -1,3 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAK SIKU 3D - 角鋼貨架</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #e2e8f0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .left-panel {
+      width: 340px;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .left-panel h1 {
+      font-size: 28px;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 12px 0;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .hint {
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+
+    .result-box {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .result-box h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #1e293b;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-item strong {
+  color: #1e293b;
+}
+
+#result-total-price {
+  color: #dc2626;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+    .right-panel {
+      flex: 1;
+      min-width: 500px;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 650px;
+      background: #f1f5f9;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    #three-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .left-panel {
+        width: 100%;
+      }
+      .right-panel {
+        min-width: auto;
+      }
+      .preview-box {
+        height: 450px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left-panel">
+    <h1>📐 RAK SIKU 3D</h1>
+    <p class="subtitle">角鋼貨架計算 + 3D 預覽 | 滑鼠拖拽旋轉</p>
+
+    <div class="form-group">
+  <label>高度 (cm)</label>
+  <input type="number" id="height" value="150" min="50" step="5">
+</div>
+
+<div class="form-group">
+  <label>長度 (cm)</label>
+  <input type="number" id="width" value="150" min="30" step="5">
+</div>
+
+<div class="form-group">
+  <label>寬度 (cm)</label>
+  <input type="number" id="depth" value="40" min="20" step="5">
+</div>
+
+<div class="form-group">
+  <label>層板數量</label>
+  <input type="number" id="levels" value="5" min="2" max="10">
+</div>
+
+    <div class="form-group">
+  <label>價格模式</label>
+  <select id="price-mode" style="
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    font-size:14px;
+    background:#fff;
+  ">
+    
+<option value="97000">幫忙切（Rp 97.000 / 根）</option>
+<option value="107000" selected>幫忙切＋安裝（Rp 107.000 / 根）</option>
+  </select>
+</div>
+
+    <button id="calculate-btn">更新模型</button>
+    <p class="hint">🖱️ 滑鼠拖拽旋轉視角 | 滾輪縮放</p>
+
+    <div class="result-box">
+      <h2>材料清單</h2>
+      <div class="result-item"><span>立柱 (4支)</span><strong id="result-tiangs">200 cm</strong></div>
+      <div class="result-item"><span>長橫桿</span><strong id="result-long">8 pcs</strong></div>
+      <div class="result-item"><span>短橫桿</span><strong id="result-short">8 pcs</strong></div>
+      <div class="result-item"><span>層板</span><strong id="result-board">4 pcs</strong></div>
+      <div class="result-item"><span>螺絲+螺母</span><strong id="result-bolt">40 pcs</strong></div>
+<div class="result-item"><span>3米角鋼總數</span><strong id="result-total-bar">0 根</strong></div>
+<div class="result-item"><span>角鋼價格</span><strong id="result-bar-price">Rp 0</strong></div>
+<div class="result-item"><span>螺絲價格</span><strong id="result-screw-price">Rp 0</strong></div>
+<div class="result-item"><span>層板價格</span><strong id="result-board-price">Rp 0</strong></div>
+<div class="result-item"><span>三角鋼價格</span><strong id="result-triangle-price">Rp 32.000</strong></div>
+<div class="result-item"><span>整組價格</span><strong id="result-total-price">Rp 0</strong></div>
+
+<div style="margin-top:20px;">
+  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">切料表</h3>
+  <div id="cutting-list" style="
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px;
+    font-size:13px;
+    line-height:1.8;
+    color:#334155;
+    white-space:pre-line;
+  "></div>
+</div>
+
+<div style="margin-top:20px;">
+  <h3 style="font-size:15px;margin-bottom:10px;color:#1e293b;">層板切割圖</h3>
+  <div id="board-layout" style="
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px;
+    overflow:auto;
+  "></div>
+</div>    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="preview-box">
+      <div id="three-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 使用傳統 script 方式載入 Three.js，更穩定 -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+  // 等待 DOM 加載完成
+  (function() {
+    // 初始化變量
+    let scene, camera, renderer, controls, rackGroup;
+    let container = document.getElementById('three-container');
+    
+    // 檢查 Three.js 是否加載
+    if (typeof THREE === 'undefined') {
+      console.error('Three.js 未加載');
+      return;
+    }
+    
+    // 初始化場景
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf1f5f9);
+    scene.fog = new THREE.FogExp2(0xf1f5f9, 0.0005);
+    
+    // 相機
+    camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(180, 150, 200);
+    camera.lookAt(0, 80, 0);
+    
+    // 渲染器
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+    
+    // 控制器
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = false;
+    controls.enableZoom = true;
+    controls.target.set(0, 80, 0);
+    
+    // 燈光
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+    scene.add(ambientLight);
+    
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(100, 200, 100);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+    
+    const backLight = new THREE.PointLight(0xccaa88, 0.4);
+    backLight.position.set(-50, 100, -80);
+    scene.add(backLight);
+    
+    const fillLight = new THREE.PointLight(0x88aaff, 0.3);
+    fillLight.position.set(80, 60, 120);
+    scene.add(fillLight);
+    
+    // 灰色磁磚地板
+const floorCanvas = document.createElement('canvas');
+floorCanvas.width = 512;
+floorCanvas.height = 512;
+
+const ctx = floorCanvas.getContext('2d');
+
+// 底色
+ctx.fillStyle = '#8f8f8f';
+ctx.fillRect(0, 0, 512, 512);
+// 做出大理石灰色紋路
+for (let i = 0; i < 1200; i++) {
+  const x = Math.random() * 512;
+  const y = Math.random() * 512;
+  const len = Math.random() * 40 + 10;
+
+  ctx.strokeStyle = `rgba(210,210,210,${Math.random() * 0.15 + 0.08})`;
+  ctx.lineWidth = Math.random() * 2 + 0.5;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(
+    x + len * 0.3,
+    y - len * 0.2,
+    x + len * 0.6,
+    y + len * 0.2,
+    x + len,
+    y
+  );
+  ctx.stroke();
+}
+
+// 磁磚縫
+ctx.strokeStyle = '#6f6f6f';
+ctx.lineWidth = 2;
+
+for (let i = 0; i <= 512; i += 64) {
+  ctx.beginPath();
+  ctx.moveTo(i, 0);
+  ctx.lineTo(i, 512);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(0, i);
+  ctx.lineTo(512, i);
+  ctx.stroke();
+}
+const floorTexture = new THREE.CanvasTexture(floorCanvas);
+floorTexture.wrapS = THREE.RepeatWrapping;
+floorTexture.wrapT = THREE.RepeatWrapping;
+floorTexture.repeat.set(8, 8);
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(1000, 1000),
+  new THREE.MeshStandardMaterial({
+    map: floorTexture,
+    roughness: 0.9,
+    metalness: 0.05
+  })
+);
+
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -4;
+floor.receiveShadow = true;
+scene.add(floor);
+    
+    // 材質
+    const metalMat = new THREE.MeshStandardMaterial({ color: 0x5c6b7e, metalness: 0.7, roughness: 0.3 });
+    const darkMetalMat = new THREE.MeshStandardMaterial({ color: 0x4a5568, metalness: 0.65, roughness: 0.35 });
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0xb87c4f, roughness: 0.7 });
+    
+    // 建立貨架模型
+    function buildRack(width, depth, height, levels) {
+      const group = new THREE.Group();
+      
+      // 四根立柱
+      const poleGeo = new THREE.BoxGeometry(4.5, height, 4.5);
+      const positions = [
+        [-width/2, height/2, -depth/2],
+        [ width/2, height/2, -depth/2],
+        [-width/2, height/2,  depth/2],
+        [ width/2, height/2,  depth/2]
+      ];
+      positions.forEach(pos => {
+        const pole = new THREE.Mesh(poleGeo, metalMat);
+        pole.position.set(pos[0], pos[1], pos[2]);
+        pole.castShadow = true;
+        group.add(pole);
+      });
+      
+      // 計算每層高度
+      const startY = 6;
+      const endY = height - 6;
+      let levelY = [];
+      if (levels === 2) {
+        levelY = [startY, endY];
+      } else {
+        const step = (endY - startY) / (levels - 1);
+        for (let i = 0; i < levels; i++) {
+          levelY.push(startY + i * step);
+        }
+      }
+      
+      let longCount = 0;
+let shortCount = 0;
+let shortPerLevel = 2;
+
+if (width > 120 && width <= 150) {
+  shortPerLevel = 3;
+}
+
+if (width > 150 && width < 200) {
+  shortPerLevel = 4;
+}
+
+if (width >= 200 && width <= 300) {
+  shortPerLevel = 5;
+}levelY.forEach((y, index) => {
+
+
+  // 層板
+  const board = new THREE.Mesh(
+    new THREE.BoxGeometry(width - 2, 2, depth - 2),
+    woodMat
+  );
+  board.position.set(0, y, 0);
+  board.castShadow = true;
+  board.receiveShadow = true;
+  group.add(board);
+
+  // 前後長橫桿（移到層板下方）
+  const longBar = new THREE.BoxGeometry(width, 3, 3);
+
+  const front = new THREE.Mesh(longBar, darkMetalMat);
+  front.position.set(0, y - 3, depth / 2 - 1);
+  front.castShadow = true;
+  group.add(front);
+
+  const back = new THREE.Mesh(longBar, darkMetalMat);
+  back.position.set(0, y - 3, -depth / 2 + 1);
+  back.castShadow = true;
+  group.add(back);
+
+  longCount += 2;
+
+  // 左右短橫桿（移到層板下方）
+  const shortBar = new THREE.BoxGeometry(3, 3, depth);
+
+  const left = new THREE.Mesh(shortBar, darkMetalMat);
+  left.position.set(-width / 2 + 1.5, y - 3, 0);
+  left.castShadow = true;
+  group.add(left);
+
+  const right = new THREE.Mesh(shortBar, darkMetalMat);
+  right.position.set(width / 2 - 1.5, y - 3, 0);
+  right.castShadow = true;
+  group.add(right);
+
+  shortCount += 2;
+
+  // 150cm 時，中間加 1 根，放在層板下方
+  if (width > 120 && width <= 150) {
+    const middle = new THREE.Mesh(shortBar, darkMetalMat);
+    middle.position.set(0, y - 3, 0);
+    middle.castShadow = true;
+    group.add(middle);
+
+    shortCount += 1;
+  }
+
+  // 200cm 時，中間加 2 根，放在層板下方
+  if (width > 150 && width < 200) {
+  const middle1 = new THREE.Mesh(shortBar, darkMetalMat);
+  middle1.position.set(-width / 4, y - 3, 0);
+  middle1.castShadow = true;
+  group.add(middle1);
+
+  const middle2 = new THREE.Mesh(shortBar, darkMetalMat);
+  middle2.position.set(width / 4, y - 3, 0);
+  middle2.castShadow = true;
+  group.add(middle2);
+
+  shortCount += 2;
+}
+
+if (width >= 200 && width <= 300) {
+  const pos = [-width / 3, 0, width / 3];
+
+  pos.forEach(x => {
+    const middle = new THREE.Mesh(shortBar, darkMetalMat);
+    middle.position.set(x, y - 3, 0);
+    middle.castShadow = true;
+    group.add(middle);
+  });
+
+  shortCount += 3;
+}
+
+// 顯示每層之間的高度
+if (index > 0) {
+  const gap = Math.round(levelY[index] - levelY[index - 1]);
+
+  const labelCanvas = document.createElement('canvas');
+  labelCanvas.width = 256;
+  labelCanvas.height = 64;
+
+  const labelCtx = labelCanvas.getContext('2d');
+
+  labelCtx.fillStyle = 'rgba(255,255,255,0.92)';
+  labelCtx.fillRect(0, 0, 256, 64);
+
+  labelCtx.strokeStyle = '#374151';
+  labelCtx.lineWidth = 2;
+  labelCtx.strokeRect(1, 1, 254, 62);
+
+  labelCtx.fillStyle = '#111827';
+  labelCtx.font = 'bold 28px Arial';
+  labelCtx.textAlign = 'center';
+  labelCtx.textBaseline = 'middle';
+  labelCtx.fillText(`${gap} cm`, 128, 32);
+
+  const labelTexture = new THREE.CanvasTexture(labelCanvas);
+
+  const labelSprite = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: labelTexture,
+      transparent: true
+    })
+  );
+
+  labelSprite.scale.set(30, 7.5, 1);
+
+  // 放在左前立柱旁
+  labelSprite.position.set(
+    -width / 2 - 18,
+    (levelY[index] + levelY[index - 1]) / 2,
+    depth / 2 + 10
+  );
+
+  group.add(labelSprite);
+}});
+// 螺絲數量
+let bolts = 0;
+
+// 中間多出的短橫桿
+const extraMiddleBars = shortPerLevel - 2;
+
+// 每層因中間支架增加的螺絲
+const extraBoltPerLevel = extraMiddleBars * 2;
+
+// 前兩層：28 顆
+// 第三層以上：12 顆
+if (levels <= 2) {
+  bolts = levels * (28 + extraBoltPerLevel);
+} else {
+  bolts =
+    (2 * (28 + extraBoltPerLevel)) +
+    ((levels - 2) * (12 + extraBoltPerLevel));
+}   
+
+
+      // 更新左側數據
+      const poleBarNeed = Math.ceil(4 / Math.floor(300 / height));
+const longBarNeed = Math.ceil(longCount / Math.floor(300 / width));
+const shortBarNeed = Math.ceil(shortCount / Math.floor(300 / depth));
+
+const total3mBars = poleBarNeed + longBarNeed + shortBarNeed;
+
+document.getElementById('result-tiangs').innerHTML =
+  `4 支 (${height} cm) / ${poleBarNeed} 根 3米角鋼`;
+
+document.getElementById('result-long').innerHTML =
+  `${longCount} 支 (${width} cm) / ${longBarNeed} 根 3米角鋼`;
+
+document.getElementById('result-short').innerHTML =
+  `${shortCount} 支 (${depth} cm) / ${shortBarNeed} 根 3米角鋼`;
+
+const boardCols = Math.max(1, Math.floor(240 / width));
+const boardRows = Math.max(1, Math.floor(120 / depth));
+const boardPerSheet = boardCols * boardRows;
+const boardNeed = levels / boardPerSheet;
+const displayBoardSheet =
+  Number.isInteger(boardNeed)
+    ? boardNeed
+    : parseFloat(boardNeed.toFixed(1));
+const triangleBrackets = levels >= 2 ? 16 : 0;
+
+document.getElementById('result-board').innerHTML =
+  `${levels} 片 / ${displayBoardSheet} 張 120×240板材`;
+
+document.getElementById('result-bolt').innerHTML =
+  `${bolts} 組`;
+
+if (!document.getElementById('result-triangle')) {
+  const triangleRow = document.createElement('div');
+  triangleRow.className = 'result-item';
+  triangleRow.innerHTML = `
+    <span>三角鋼</span>
+    <strong id="result-triangle">${triangleBrackets} 片</strong>
+  `;
+
+  document
+    .getElementById('result-bolt')
+    .parentElement
+    .insertAdjacentElement('afterend', triangleRow);
+} else {
+  document.getElementById('result-triangle').innerHTML =
+    `${triangleBrackets} 片`;
+}
+document.getElementById('result-total-bar').innerHTML =
+  `${total3mBars} 根`;
+
+ const pricePerBar = parseInt(document.getElementById('price-mode').value);
+
+// 角鋼價格
+const barPrice = total3mBars * pricePerBar;
+
+// 螺絲價格
+let screwPrice = 0;
+
+// 幫忙切＋安裝：全部螺絲都算
+if (pricePerBar === 107000) {
+  screwPrice = bolts * 1000;
+}
+
+// 幫忙切：10支以上角鋼送50組螺絲，超過50組才開始算
+if (pricePerBar === 97000) {
+  let freeBolts = 0;
+
+  if (total3mBars >= 20) {
+    freeBolts = 100;
+  } else if (total3mBars >= 10) {
+    freeBolts = 50;
+  }
+
+  const chargeBolt = Math.max(0, bolts - freeBolts);
+  screwPrice = chargeBolt * 1000;
+}
+// 板材價格
+// 不足半張算半張，超過半張算下一個 0.5
+const boardSheetCount = Math.ceil(boardNeed * 2) / 2;
+
+const boardPrice = boardSheetCount * 155000;
+
+// 三角鋼價格
+let trianglePrice = 32000;
+
+// 幫忙切，而且3米角鋼達10支以上，送16片三角鋼
+if (pricePerBar === 97000 && total3mBars >= 10) {
+  trianglePrice = 0;
+}
+
+// 總價
+const totalPrice = barPrice + screwPrice + boardPrice + trianglePrice;
+
+// 顯示
+document.getElementById('result-bar-price').innerHTML =
+  `Rp ${barPrice.toLocaleString('id-ID')}`;
+
+if (pricePerBar === 107000) {
+  document.getElementById('result-screw-price').innerHTML =
+    `${bolts} 組 = Rp ${screwPrice.toLocaleString('id-ID')}`;
+} else if (pricePerBar === 97000) {
+  let freeBolts = 0;
+
+  if (total3mBars >= 20) {
+    freeBolts = 100;
+  } else if (total3mBars >= 10) {
+    freeBolts = 50;
+  }
+
+  const chargeBolt = Math.max(0, bolts - freeBolts);
+
+  document.getElementById('result-screw-price').innerHTML =
+    freeBolts > 0
+      ? `${chargeBolt} 組（送${freeBolts}組） = Rp ${screwPrice.toLocaleString('id-ID')}`
+      : `${bolts} 組 = Rp ${screwPrice.toLocaleString('id-ID')}`;
+} else {
+  document.getElementById('result-screw-price').innerHTML = `免費`;
+}document.getElementById('result-board-price').innerHTML =
+  `${boardSheetCount} 張 = Rp ${boardPrice.toLocaleString('id-ID')}`;
+
+document.getElementById('result-triangle-price').innerHTML =
+  trianglePrice === 0
+    ? `送16片`
+    : `Rp ${trianglePrice.toLocaleString('id-ID')}`;
+document.getElementById('result-total-price').innerHTML =
+  `Rp ${totalPrice.toLocaleString('id-ID')}`;
+
+
+let cuttingLines = [];
+let barIndex = 1;
+
+function addCutting(size, count, label) {
+  const perBar = Math.floor(300 / size);
+
+  while (count > 0) {
+    const use = Math.min(count, perBar);
+
+    let pieces = [];
+    for (let i = 0; i < use; i++) {
+      pieces.push(size);
+    }
+
+    const used = use * size;
+    const remain = 300 - used;
+
+    let text = `第${barIndex}根：${pieces.join(' + ')} → ${label}`;
+
+    if (remain > 0) {
+      text += `，剩 ${remain}cm`;
+    }
+
+    cuttingLines.push(text);
+
+    count -= use;
+    barIndex++;
+  }
+}
+
+addCutting(height, 4, '立柱');
+addCutting(width, longCount, '長橫桿');
+addCutting(depth, shortCount, '短橫桿');
+
+document.getElementById('cutting-list').innerHTML =
+  cuttingLines.join('<br>');
+
+const sheetNeed = Math.ceil(levels / boardPerSheet);
+
+let boardHtml = '';
+
+for (let s = 1; s <= sheetNeed; s++) {  boardHtml += `
+    <div style="margin-bottom:16px;">
+      <div style="
+        font-size:13px;
+        font-weight:bold;
+        margin-bottom:8px;
+        color:#334155;
+      ">
+        第${s}張板材（120 × 240 cm）
+      </div>
+
+      <div style="
+        position:relative;
+        width:240px;
+        height:120px;
+        border:2px solid #334155;
+        background:#fff;
+      ">
+  `;
+
+  let pieceIndex = 0;
+
+  for (let row = 0; row < boardRows; row++) {
+    for (let col = 0; col < boardCols; col++) {
+      const totalIndex = ((s - 1) * boardPerSheet) + pieceIndex;
+
+      if (totalIndex >= levels) break;
+
+      boardHtml += `
+        <div style="
+          position:absolute;
+          left:${col * Math.min(width, 240)}px;
+top:${row * Math.min(depth, 120)}px;
+width:${Math.min(width, 240)}px;
+height:${Math.min(depth, 120)}px;
+          background:#dbeafe;
+          border:1px solid #3b82f6;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:11px;
+          color:#1e3a8a;
+        ">
+          ${width}×${depth}
+        </div>
+      `;
+
+      pieceIndex++;
+    }
+  }
+
+  const remainW = Math.max(0, 240 - boardCols * Math.min(width, 240));
+const remainH = Math.max(0, 120 - boardRows * Math.min(depth, 120));
+
+  if (remainW > 0) {
+  boardHtml += `
+    <div style="
+      position:absolute;
+      right:0;
+      top:0;
+      width:${remainW}px;
+      height:120px;
+      background:#fee2e2;
+      border-left:2px dashed #ef4444;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      color:#991b1b;
+      writing-mode:vertical-rl;
+      text-align:center;
+    ">
+      剩 ${remainW} × 120
+    </div>
+  `;
+}
+
+  if (remainH > 0) {
+  boardHtml += `
+    <div style="
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:${boardCols * Math.min(width, 240)}px;
+      height:${remainH}px;
+      background:#fef3c7;
+      border-top:2px dashed #f59e0b;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      color:#92400e;
+      text-align:center;
+    ">
+      剩 ${boardCols * Math.min(width, 240)} × ${remainH}
+    </div>
+  `;
+}
+
+boardHtml += `
+      </div>
+    </div>
+  `;
+}
+
 document.getElementById('board-layout').innerHTML = boardHtml;
 
 // ===== 總尺寸標示 =====
@@ -66,4 +914,67 @@ createSizeLabel(
   8
 );
 
-return group;
+return group;}
+
+function updateRack() {
+  const height = parseFloat(document.getElementById('height').value);
+  const width = parseFloat(document.getElementById('width').value);
+  const depth = parseFloat(document.getElementById('depth').value);
+  const levels = parseInt(document.getElementById('levels').value);      
+      // 移除舊模型
+      if (rackGroup) {
+        scene.remove(rackGroup);
+      }
+      
+      // 建立新模型
+      rackGroup = buildRack(width, depth, height, levels);
+      scene.add(rackGroup);
+      
+      // 調整相機目標
+      controls.target.set(0, height / 2, 0);
+
+const maxSize = Math.max(width, depth, height);
+
+camera.position.set(
+  maxSize * 1.4,
+  height * 0.8,
+  maxSize * 1.4
+);
+
+camera.lookAt(0, height / 2, 0);
+controls.update();
+    }
+    
+    // 綁定事件
+    document.getElementById('calculate-btn').addEventListener('click', updateRack);
+document.getElementById('height').addEventListener('input', updateRack);
+document.getElementById('width').addEventListener('input', updateRack);
+document.getElementById('depth').addEventListener('input', updateRack);
+document.getElementById('levels').addEventListener('input', updateRack);
+document.getElementById('price-mode').addEventListener('change', updateRack);
+    
+    // 動畫循環
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update(); // 更新控制
+      renderer.render(scene, camera);
+    }
+    animate();
+    
+    // 視窗大小調整
+    window.addEventListener('resize', function() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+    
+    // 初始加載模型
+    setTimeout(updateRack, 100);
+    
+    console.log('3D 場景已啟動');
+  })();
+</script>
+</body>
+</html>
